@@ -1,67 +1,76 @@
 import numpy as np
 class Cmac:
-    def __init__(self,g,a,o,i=0,d=0):
-        self.generalization = g
-        self.AssociationCell = np.zeros([a,1])
-        self.outputs = np.zeros([o,1])
-        self.weights = np.zeros([a*o,1]) if(i==0) else np.zeros([a*o,a*o])
-        self.inputDimension = 1 if(i == 0) else 2
-        self.discreteCmac = 0 if(d==0) else 1
+    def __init__(self,g,a,res):
+        self.generalization = g if(g%2 == 1) else g-1
+        self.AssociationCells = np.zeros([a,1])
+
+        #increasing weights by generalization number for
+        #association cells at extremes 
+        self.weights = np.zeros([a+g,1]) 
+
+        self.resolution = res
 
 
-    def activateOrDeactivateACells(self,x,v=0):
-        for i in x:
-            if(self.inputDimension == 1):
-                address = self.__getAddress([i])
-                for j in address:
-                    self.AssociationCell[j] = v
+    def __kernel(self,x1,x2):
+        return 1/abs(x1-x2)
+        # return 1/(x1-x2)**2
+        # return 1/np.exp((x1-x2)**2/4)
 
-            elif(self.inputDimension == 2):
-                address = self.__getAddress(i)
-                for j in address:
-                    self.AssociationCell[j[0],j[1]]= v
+
+
+    def prediction(self,x,xmin=0,xmax=10):
+        if(x<min(x,xmin) or x> max(x,xmax)):
+            raise Exception('Input must be within specified range')
+
+        quantization = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)) + 
+                       np.floor(self.generalization/2))
+        quant = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)))
+        low = int(quantization -np.floor(self.generalization/2))
+        high= int(quantization +np.floor(self.generalization/2))
+        neighborOfx = (low,high)
+
+        # print('value of x is {}'.format(x))
+        # print('neighbor of x is {}'.format(neighborOfx))
+        # print('quantization of x is{}'.format(quantization))
+        # print("===============")
+        # print(" ")
+        result = 0
+        for i in range(neighborOfx[0],neighborOfx[1]+1):
+            result += self.weights[i] 
+
+        return result
+
+
+    def __updateWeights(self,x,learningRate,error,xmin,xmax):
+        quantization = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)) + 
+                       np.floor(self.generalization/2))
+        quant = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)))
+        low = int(quantization -np.floor(self.generalization/2))
+        high= int(quantization +np.floor(self.generalization/2))
+        neighborOfx = (low,high)
+
         
-    def __getAddress(self,x):
-        l = []
-        if(len(x)!=self.inputDimension):
-            print("Input must be of specified dimension")
-            return l
-
-        for i in range(self.generalization):
-            if(self.inputDimension == 1):
-                l.append(x[0]+i)
-            elif(self.inputDimension == 2):
-                l.append([x[0]+i,x[1]+i])
-
-        return l
-
-    def getACell(self):
-        return self.AssociationCell
-
-    def __modifyWeights(self,x):
-        pass
-
-    def train(self,x,y):
-        pass
+        for i in range(neighborOfx[0],neighborOfx[1]+1):
+            self.weights[i] -= learningRate*error*self.__kernel(quantization,self.weights[i])
 
 
 
+    def train(self,x,y,learningRate=0.02,iterations=2000,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
+        for i in range(len(x)):
+            for j in range(iterations):
+                error = y[i] - self.prediction(x[i],xmin,xmax) 
+                if(error < accuracy):
+                    break
+                self.__updateWeights(x[i],learningRate,error, xmin,xmax)
+        print(self.weights)
 
-# a = Cmac(4,35,1,0)
+                
 
-# x = [2, 7]
-# a.activateOrDeactivateACells(x,1)
-# h =np.copy(a.getACell())
-# a.activateOrDeactivateACells(x,0)
+        
+# a = Cmac(5,35,35)
+# x = np.array([0, 1, 2])
+# x.reshape(len(x),1)
+# y = np.cos(x) 
 
-# x = [1]
-# a.activateOrDeactivateACells(x,3)
-# g =np.copy(a.getACell())
-# a.activateOrDeactivateACells(x,0)
-
-# x = [0]
-# a.activateOrDeactivateACells(x,4)
-# q = np.copy(a.getACell())
-# a.activateOrDeactivateACells(x,0)
-# print(np.c_[h,g,q])
-
+# a.train(x,y)
+# print(a.prediction(x[2]))
