@@ -29,7 +29,7 @@ a = Cmac(5,35,35)
 ###############
 #  Discrete
 ###############
-accuracyTable = a.train(trainData[:,0],trainData[:,1])
+accuracyTableD = a.train(trainData[:,0],trainData[:,1])
 
 testDataResults = np.zeros((len(x),2))
 
@@ -76,11 +76,11 @@ plt.legend(loc = "upper right")
 ###########################
 # Accuracy Table Discrete
 ###########################
-# fig2, ax2 = plt.subplots()
-# ax2.plot(accuracyTable[:,0],accuracyTable[:,1],'-o')
-# ax2.set_title("Accuracy of Training")
-# ax2.set_ylabel("Percentage wrong")
-# ax2.set_xlabel("Num of training samples")
+fig2, ax2 = plt.subplots()
+ax2.plot(accuracyTableD[:,0],accuracyTableD[:,1],'-o')
+ax2.set_title("Accuracy of Training")
+ax2.set_ylabel("Percentage wrong")
+ax2.set_xlabel("Num of training samples")
 
 ########################
 # Continuous Cmac
@@ -98,10 +98,10 @@ plt.legend(loc = "upper right")
 #############################
 # Accuracy Table Continuous
 #############################
-# fig4, ax4 = plt.subplots()
-# ax4.plot(accuracyTableC[:,0],accuracyTableC[:,1],'-o')
-# ax4.set_title("Accuracy of Training")
-# ax4.set_ylabel("Percentage wrong")
-# ax4.set_xlabel("Num of training samples")
+fig4, ax4 = plt.subplots()
+ax4.plot(accuracyTableC[:,0],accuracyTableC[:,1],'-o')
+ax4.set_title("Accuracy of Training")
+ax4.set_ylabel("Percentage wrong")
+ax4.set_xlabel("Num of training samples")
 plt.show()
 

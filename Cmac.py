@@ -52,10 +52,12 @@ class Cmac:
         neighborOfx[0],neighborOfx[1],quantization = self.__quantizeInput(x)
 
         if(d == 0): # Discrete Cmac
+            print("I am not here")
             for i in range(neighborOfx[0],neighborOfx[1]+1):
                 self.weights[i] += learningRate*error*self.__kernel(quantization,i)
         
         else:    # continuous Cmac
+            print("I am here")
             for i in range(neighborOfx[0],neighborOfx[1]+1):
                 if(i == neighborOfx[0]):
                     self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
@@ -66,6 +68,7 @@ class Cmac:
                         self.weights[i] += learningRate*error*self.__kernel(quantization,i)
 
     def train(self,x,y,learningRate=0.02,iterations=2000,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
+        accuracyTable = np.zeros((len(x),2))
         for i in range(len(x)):
             for j in range(iterations):
                 error = y[i]-self.prediction(x[i],xmin,xmax,d) 
@@ -77,13 +80,13 @@ class Cmac:
                     break
                 self.__updateWeights(x[i],learningRate,error, xmin,xmax,d)
 
-            # count = 0
-            # for k in range(len(x)):
-                # error = y[k] - self.prediction(x[k],xmin,xmax,d)
-                # if(error >= 0.01):
-                    # count += 1
-            # accuracyTable[i] = [i,count/len(x)*100]
-        print(self.weights)
+            count = 0
+            for k in range(len(x)):
+                error = y[k] - self.prediction(x[k],xmin,xmax,d)
+                if(error >= 0.01):
+                    count += 1
+            accuracyTable[i] = [i,count/len(x)*100]
+        return accuracyTable
 
                 
         
