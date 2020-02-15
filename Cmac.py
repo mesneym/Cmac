@@ -61,13 +61,12 @@ class Cmac:
                 print("error is{}".format(error))
                 print("==========")
                 print(" ")
-                if(error < accuracy):
+                if(abs(error)< accuracy):
                     break
                 self.__updateWeights(x[i],learningRate,error, xmin,xmax)
         print(self.weights)
 
                 
-
         
 a = Cmac(5,35,35)
 x = np.array([0, 1, 2])
