@@ -38,11 +38,11 @@ class Cmac:
         if(d == 0):
             result = self.weights[neighborOfx[0]:neighborOfx[1]+1].sum()
         else:
-            # if(neighborOfx[1]+1 < len(self.weights)):
-                # result = 0.5*self.weights[neighborOfx[1]+1]  \
-                         # +0.5*self.weights[neighborOfx[0]] \
-                         # +self.weights[neighborOfx[0]+1:neighborOfx[1]+1].sum()
-            # else:
+            if(neighborOfx[1]+1 < len(self.weights)):
+                result = 0.5*self.weights[neighborOfx[1]+1]  \
+                         +0.5*self.weights[neighborOfx[0]] \
+                         +self.weights[neighborOfx[0]+1:neighborOfx[1]+1].sum()
+            else:
                  result = self.weights[neighborOfx[0]:neighborOfx[1]+1].sum()
         return result
 
@@ -54,19 +54,16 @@ class Cmac:
         if(d == 0): # Discrete Cmac
             for i in range(neighborOfx[0],neighborOfx[1]+1):
                 self.weights[i] += learningRate*error*self.__kernel(quantization,i)
-                print("weight is {}".format(self.weights[i]))
         
-        # else:    # continuous Cmac
-            # for i in range(neighborOfx[0],neighborOfx[1]+1):
-                # if(i == neighborOfx[0]):
-                    # self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
-                # elif(i< len(self.weights)):
-                    # if(i == neighborOfx[1]+1):
-                        # self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
-                    # else:
-                        # self.weights[i] += learningRate*error*self.__kernel(quantization,i)
-                # print(self.weights[i])
-
+        else:    # continuous Cmac
+            for i in range(neighborOfx[0],neighborOfx[1]+1):
+                if(i == neighborOfx[0]):
+                    self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                elif(i< len(self.weights)):
+                    if(i == neighborOfx[1]+1):
+                        self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                    else:
+                        self.weights[i] += learningRate*error*self.__kernel(quantization,i)
 
     def train(self,x,y,learningRate=0.02,iterations=2000,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
         for i in range(len(x)):

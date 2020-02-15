@@ -44,7 +44,7 @@ testDataResults = testDataResults[idx]
 ###############
 #  Continuous
 ###############
-accuracyTableC = a.train(trainData[:,0],trainData[:,1],d=0)
+accuracyTableC = a.train(trainData[:,0],trainData[:,1],d=1)
 
 testDataResultsC = np.zeros((len(x),2))
 
