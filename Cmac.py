@@ -18,40 +18,56 @@ class Cmac:
         # return 1/abs(x1-x2)
         return 1/np.exp((x1-x2)**2/4)
 
-
-
-    def prediction(self,x,xmin=0,xmax=10):
+    def __quantizeInput(self,x,xmin =0, xmax = 10):
         if(x<min(x,xmin) or x> max(x,xmax)):
             raise Exception('Input must be within specified range')
 
         quantization = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)) + 
                        np.floor(self.generalization/2))
-        low = int(quantization -np.floor(self.generalization/2))
-        high= int(quantization +np.floor(self.generalization/2))
-        neighborOfx = (low,high)
+        low = int(quantization - np.floor(self.generalization/2))
+        high= int(quantization + np.floor(self.generalization/2))
 
-        # print('value of x is {}'.format(x))
-        # print('neighbor of x is {}'.format(neighborOfx))
-        # print('quantization of x is{}'.format(quantization))
-        # print("===============")
-        # print(" ")
+        return [low,high,quantization]
+
+
+    def prediction(self,x,xmin=0,xmax=10,d = 0):
+        neighborOfx = [0,0]
+        neighborOfx[0],neighborOfx[1],quantization = self.__quantizeInput(x)
+
         result = 0
-        for i in range(neighborOfx[0],neighborOfx[1]+1):
-            result += self.weights[i] 
-
+        if(d == 0):
+            result = self.weights[neighborOfx[0]:neighborOfx[1]+1].sum()
+        else:
+            # if(neighborOfx[1]+1 < len(self.weights)):
+                # result = 0.5*self.weights[neighborOfx[1]+1]  \
+                         # +0.5*self.weights[neighborOfx[0]] \
+                         # +self.weights[neighborOfx[0]+1:neighborOfx[1]+1].sum()
+            # else:
+                 result = self.weights[neighborOfx[0]:neighborOfx[1]+1].sum()
         return result
 
 
     def __updateWeights(self,x,learningRate,error,xmin,xmax):
-        quantization = int(np.floor(self.resolution*(x-xmin)/(xmax-xmin)) + 
-                       np.floor(self.generalization/2))
-        low = int(quantization -np.floor(self.generalization/2))
-        high= int(quantization +np.floor(self.generalization/2))
-        neighborOfx = (low,high)
+        neighborOfx = [0,0]
+        neighborOfx[0],neighborOfx[1],quantization = self.__quantizeInput(x)
 
-        
+        # if(d == 0): # Discrete Cmac
         for i in range(neighborOfx[0],neighborOfx[1]+1):
             self.weights[i] += learningRate*error*self.__kernel(quantization,i)
+            print("weight is {}".format(self.weights[i]))
+        
+
+        # else:    # continuous Cmac
+            # for i in range(neighborOfx[0],neighborOfx[1]+1):
+                # if(i == neighborOfx[0]):
+                    # self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                # elif(i< len(self.weights)):
+                    # if(i == neighborOfx[1]+1):
+                        # self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                    # else:
+                        # self.weights[i] += learningRate*error*self.__kernel(quantization,i)
+                # print(self.weights[i])
+
 
     def train(self,x,y,learningRate=0.02,iterations=2000,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
         for i in range(len(x)):
@@ -61,17 +77,10 @@ class Cmac:
                 print("error is{}".format(error))
                 print("==========")
                 print(" ")
-                if(abs(error)< accuracy):
+                if(abs(error)<= accuracy):
                     break
                 self.__updateWeights(x[i],learningRate,error, xmin,xmax)
         print(self.weights)
 
                 
         
-a = Cmac(5,35,35)
-x = np.array([0, 1, 2])
-x.reshape(len(x),1)
-y = np.cos(x) 
-
-a.train(x,y)
-print(a.prediction(x[2]))
