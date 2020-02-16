@@ -52,13 +52,13 @@ class Cmac:
         neighborOfx[0],neighborOfx[1],quantization = self.__quantizeInput(x)
 
         if(d == 0): # Discrete Cmac
-            print("I am not here")
+            # print("I am not here")
             for i in range(neighborOfx[0],neighborOfx[1]+1):
                 self.weights[i] += learningRate*error*self.__kernel(quantization,i)
         
         else:    # continuous Cmac
-            print("I am here")
-            for i in range(neighborOfx[0],neighborOfx[1]+1):
+            # print("I am here")
+            for i in range(neighborOfx[0],neighborOfx[1]+2):
                 if(i == neighborOfx[0]):
                     self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
                 elif(i< len(self.weights)):
@@ -72,10 +72,10 @@ class Cmac:
         for i in range(len(x)):
             for j in range(iterations):
                 error = y[i]-self.prediction(x[i],xmin,xmax,d) 
-                print("prediction is {}".format(self.prediction(x[i],xmin,xmax)))
-                print("error is{}".format(error))
-                print("==========")
-                print(" ")
+                # print("prediction is {}".format(self.prediction(x[i],xmin,xmax)))
+                # print("error is{}".format(error))
+                # print("==========")
+                # print(" ")
                 if(abs(error)<= accuracy):
                     break
                 self.__updateWeights(x[i],learningRate,error, xmin,xmax,d)
