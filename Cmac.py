@@ -1,3 +1,8 @@
+########################################
+# This file contains the implemention
+# of Cmac
+########################################
+
 import numpy as np
 class Cmac:
     def __init__(self,g,a,res):
@@ -68,8 +73,9 @@ class Cmac:
 
 
     def train(self,x,y,learningRate=0.01,iterations=100,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
-        accuracyTable = np.zeros((len(x),2))
+        accuracyTable = []
         for j in range(iterations):
+            numErrors = 0
             for i in range(len(x)):
                 error = y[i]-self.prediction(x[i],xmin,xmax,d) 
                 # print("prediction is {}".format(self.prediction(x[i],xmin,xmax)))
@@ -79,13 +85,8 @@ class Cmac:
                 if(abs(error)<= accuracy):
                     continue
                 self.__updateWeights(x[i],learningRate,error, xmin,xmax,d)
-
-            count = 0
-            for k in range(len(x)):
-                error = y[k] - self.prediction(x[k],xmin,xmax,d)
-                if(error >= 0.01):
-                    count += 1
-            accuracyTable[i] = [i,count/len(x)*100]
+                numErrors += 1
+            accuracyTable.append([j,numErrors/len(x)*100])
         return accuracyTable
 
                 

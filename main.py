@@ -16,6 +16,7 @@ Ty = np.sin(Tx)
 x = np.random.uniform(0,10,(70,1))
 y = np.sin(x)
 
+#Training data
 trainData = np.column_stack((x,y))
 
 x = np.random.uniform(0,10,(30,1))
@@ -23,20 +24,24 @@ y = np.sin(x)
 
 testDataExpected = np.column_stack((x,y))
 
+#Sorting testDataExpected
 idx = testDataExpected[:,0].argsort()
 testDataExpected = testDataExpected[idx]
 
 ###########################################
 #        Training and Testing Cmac
 ###########################################
-g = 5
-w = 35
-ac = 35
+g = 5   # generalization number
+w = 35  # number of weights
+ac = 35 # resolution(number of grids for
+        # look up table) 
+
 a = Cmac(g,w,ac)
 
 ##################################
 #         Discrete
 ##################################
+#train data with discrete cmac
 a.train(trainData[:,0],trainData[:,1])
 testDataResults = np.zeros((len(testDataExpected),2))
 
@@ -47,6 +52,7 @@ for i in range(len(testDataExpected)):
     y = a.prediction(testDataExpected[i,0])
     testDataResults[i]=[testDataExpected[i,0],y]
 
+#sort testDataResults 
 idx = testDataResults[:,0].argsort()
 testDataResults = testDataResults[idx]
 
@@ -76,6 +82,7 @@ for i in range(len(testDataExpected)):
     y = a.prediction(testDataExpected[i,0])
     testDataResultsC[i]=[testDataExpected[i,0],y]
 
+#sort testDataResults
 idx = testDataResultsC[:,0].argsort()
 testDataResultsC = testDataResultsC[idx]
 
@@ -85,7 +92,7 @@ testDataResultsC = testDataResultsC[idx]
 count = 0.0
 accuracyContinous = 0
 for i in range(len(testDataExpected)):
-    if(abs(testDataResults[i,1] - testDataExpected[i,1])<= 0.1):
+    if(abs(testDataResultsC[i,1] - testDataExpected[i,1])<= 0.1):
         count += 1
 accuracyContinous = count/len(testDataExpected) * 100
 
@@ -106,10 +113,12 @@ ax1.set_xlabel("X-label for axis 1")
 ax1.set_ylabel("sin(x)")
 plt.legend(loc = "upper right")
 plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyDiscrete,2)))
-strFile = "./Data/Accuracy/discreteAccuracy.png"
+strFile = "./Results/discreteAccuracy.png"
 if os.path.isfile(strFile):
    os.remove(strFile)   
-plt.savefig('./Data/Accuracy/discreteAccuracy.png')
+
+fig1.set_size_inches(8, 5)
+plt.savefig('./Results/discreteAccuracy.png')
 
 ########################
 # Continuous Cmac
@@ -123,10 +132,12 @@ ax3.set_xlabel("X-label for axis 1")
 ax3.set_ylabel("sin(x)")
 plt.legend(loc = "upper right")
 plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyContinous,2)))
-strFile = "./Data/Accuracy/continuousAccuracy.png"
+strFile = "./Results/continuousAccuracy.png"
 if os.path.isfile(strFile):
    os.remove(strFile)   
-plt.savefig('./Data/Accuracy/continousAccuracy.png')
+
+fig3.set_size_inches(8, 5)
+plt.savefig('./Results/continousAccuracy.png')
 plt.show()
 
 

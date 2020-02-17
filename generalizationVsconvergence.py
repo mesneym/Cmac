@@ -37,12 +37,14 @@ for row in ax:
         g += 1
 
 fig.subplots_adjust(hspace=0.5)
+fig.set_size_inches(20, 10)
+# manager = plt.get_current_fig_manager()
+# manager.resize(*manager.window.maxsize())
 
-strFile = "/home/ak/Cmac/Data/convergenceVsgeneralization.png"
+strFile = "/home/ak/Cmac/Results/convergenceVsgeneralization.png"
 if os.path.isfile(strFile):
    os.remove(strFile)   
-plt.savefig("/home/ak/Cmac/Data/convergenceVsgeneralization.png")
+
+plt.savefig("/home/ak/Cmac/Results/convergenceVsgeneralization.png", bbox_inches='tight')
 plt.show()
-
-
 
