@@ -23,58 +23,70 @@ y = np.sin(x)
 
 testDataExpected = np.column_stack((x,y))
 
+idx = testDataExpected[:,0].argsort()
+testDataExpected = testDataExpected[idx]
+
 ###########################################
 #        Training and Testing Cmac
 ###########################################
-g = 3
+g = 5
 w = 35
 ac = 35
 a = Cmac(g,w,ac)
 
-###############
-#  Discrete
-###############
+##################################
+#         Discrete
+##################################
 a.train(trainData[:,0],trainData[:,1])
-
 testDataResults = np.zeros((len(testDataExpected),2))
 
+#######################
+# Test Data Prediction
+#######################
 for i in range(len(testDataExpected)):
-    y = a.prediction(x[i])
-    testDataResults[i]=[x[i],y]
+    y = a.prediction(testDataExpected[i,0])
+    testDataResults[i]=[testDataExpected[i,0],y]
 
 idx = testDataResults[:,0].argsort()
 testDataResults = testDataResults[idx]
 
-
-count = 0
+#######################
+# Calculating accuracy
+#######################
+count = 0.0
 accuracyDiscrete = 0
 for i in range(len(testDataExpected)):
-    if(abs(testDataResults[i,1] - testDataExpected[i,1])<= 0.5):
+    if(abs(testDataResults[i,1] - testDataExpected[i,1])<= 0.1):
         count += 1
 
 accuracyDiscrete = count/len(testDataExpected) * 100
 
 
-###############
-#  Continuous
-###############
+###################################
+#           Continuous
+###################################
+# set d  to 1 to indicate continuous cmac
 a.train(trainData[:,0],trainData[:,1],d=1)
+testDataResultsC = np.zeros((len(testDataExpected),2))
 
-testDataResultsC = np.zeros((len(x),2))
-
+#######################
+# Test Data Prediction
+#######################
 for i in range(len(testDataExpected)):
-    y = a.prediction(x[i])
-    testDataResultsC[i]=[x[i],y]
+    y = a.prediction(testDataExpected[i,0])
+    testDataResultsC[i]=[testDataExpected[i,0],y]
 
 idx = testDataResultsC[:,0].argsort()
 testDataResultsC = testDataResultsC[idx]
 
-count = 0
+#######################
+# Calculating accuracy
+#######################
+count = 0.0
 accuracyContinous = 0
 for i in range(len(testDataExpected)):
-    if(abs(testDataResults[i,1] - testDataExpected[i,1])<= 0.5):
+    if(abs(testDataResults[i,1] - testDataExpected[i,1])<= 0.1):
         count += 1
-
 accuracyContinous = count/len(testDataExpected) * 100
 
 
@@ -93,7 +105,7 @@ ax1.set_title("Discrete CMAC(generalization= {})".format(g))
 ax1.set_xlabel("X-label for axis 1")
 ax1.set_ylabel("sin(x)")
 plt.legend(loc = "upper right")
-plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyDiscrete)))
+plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyDiscrete,2)))
 strFile = "./Data/Accuracy/discreteAccuracy.png"
 if os.path.isfile(strFile):
    os.remove(strFile)   
@@ -110,7 +122,7 @@ ax3.set_title("Continuous CMAC (generalization=%i)" %g)
 ax3.set_xlabel("X-label for axis 1")
 ax3.set_ylabel("sin(x)")
 plt.legend(loc = "upper right")
-plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyContinous)))
+plt.text(3,0.5, 'accuracy of test data =  {}'.format(np.round(accuracyContinous,2)))
 strFile = "./Data/Accuracy/continuousAccuracy.png"
 if os.path.isfile(strFile):
    os.remove(strFile)   
