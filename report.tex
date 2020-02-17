@@ -17,7 +17,7 @@
 
   \paragraph{Accuracy:}
     Below is a graph that depicts the accuracy of the Discrete Cmac. After running a couple of times, it can 
-    be noted that the accuracy hovers between 70-80\%
+    be noted that the accuracy hovers between 70-85\%
   \begin{figure}[h!]
     \includegraphics[scale=0.7]{./Results/discreteAccuracy.png}
   \end{figure}
@@ -32,7 +32,11 @@
      \includegraphics[scale=0.65]{./Results/continousAccuracy.png}
   \end{figure}
   \paragraph{Discrete Vs Continous Cmac:}
-  For the same parameters used in training the Discrete Cmac(generalization number, number of iterations in training,accuracy used in training,learning rate), it can be noted that the continous Cmac has a significant drop in accuracy as the model clearly seems to overfit.This is because the continous cmac slides over more weights. Therefore, although a generalization number of 5 is used, more than 5 weights are changed during each update and this means that more inputs are categorized as similar and that is undesirable. To rectify this the generalization number can be reduced and number of iterations increased to improve perfomance.   
+  The "convergence Vs generalization" graphs for both continous cmac and discrete cmac are relatively similar in particular for generalization numbers g = 3 to 6. However,the accuracy of the test results  are clearly different.
+  For the same parameters used in training the Discrete Cmac(generalization number, number of iterations in training,accuracy used in training,learning rate), it can be noted that the continous Cmac has a significant drop in accuracy as the model clearly seems to overfit.This is because the continous cmac slides over more weights. Therefore, although a generalization number of 5 is used, more than 5 weights are changed during each update and this means that more inputs are categorized as similar and that is undesirable. To rectify this the generalization number can be reduced and number of iterations increased to improve perfomance. Also, the type of sliding window utilized has an impact on the results.  
+  \begin{figure}[h!]
+    \includegraphics[scale=0.35]{./Results/convergenceVsgeneralizationC.png}
+  \end{figure}
 \newpage
 \section{Recurrent Networks}
 \end{document}

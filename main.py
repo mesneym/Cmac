@@ -92,7 +92,7 @@ testDataResultsC = testDataResultsC[idx]
 count = 0.0
 accuracyContinous = 0
 for i in range(len(testDataExpected)):
-    if(abs(testDataResultsC[i,1] - testDataExpected[i,1])<= 0.1):
+    if(abs(testDataResultsC[i,1] - testDataExpected[i,1])<= 0.05):
         count += 1
 accuracyContinous = count/len(testDataExpected) * 100
 

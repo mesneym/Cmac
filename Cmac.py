@@ -63,16 +63,16 @@ class Cmac:
         else:    # continuous Cmac
             for i in range(neighborOfx[0],neighborOfx[1]+2):
                 if(i == neighborOfx[0]):
-                    self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                    self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.8
                 elif(i< len(self.weights)):
                     if(i == neighborOfx[1]+1):
-                        self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.5
+                        self.weights[i] += learningRate*error*self.__kernel(quantization,i)*0.2
                     else:
                         self.weights[i] += learningRate*error*self.__kernel(quantization,i)
 
 
 
-    def train(self,x,y,learningRate=0.01,iterations=100,accuracy=0.01,d = 0, xmin=0 ,xmax =10):
+    def train(self,x,y,learningRate=0.01,iterations=100,accuracy=0.05,d = 0, xmin=0 ,xmax =10):
         accuracyTable = []
         for j in range(iterations):
             numErrors = 0
