@@ -12,6 +12,7 @@
   as similar,hence a high bias. Ideally, g is chosen so that tasks which are related have similar values whiles tasks
   which are different have clear cut distinct values. 
   \begin{figure}[h!]
+     \centering
     \includegraphics[scale=0.35]{./Results/convergenceVsgeneralization.png}
   \end{figure}
 
@@ -19,6 +20,7 @@
     Below is a graph that depicts the accuracy of the Discrete Cmac. After running a couple of times, it can 
     be noted that the accuracy hovers between 70-85\%
   \begin{figure}[h!]
+    \centering
     \includegraphics[scale=0.7]{./Results/discreteAccuracy.png}
   \end{figure}
 \newpage 
@@ -29,12 +31,14 @@
     Below is a graph that depicts the accuracy of the Continous Cmac. After running the the code a couple of times, it can
     be noted that the accuracy hovers between 40-60\%
   \begin{figure}[h!]
+     \centering
      \includegraphics[scale=0.65]{./Results/continousAccuracy.png}
   \end{figure}
   \paragraph{Discrete Vs Continous Cmac:}
   The "convergence Vs generalization" graphs for both continous cmac and discrete cmac are relatively similar in particular for generalization numbers g = 3 to 6. However,the accuracy of the test results  are clearly different.
   For the same parameters used in training the Discrete Cmac(generalization number, number of iterations in training,accuracy used in training,learning rate), it can be noted that the continous Cmac has a significant drop in accuracy as the model clearly seems to overfit.This is because the continous cmac slides over more weights. Therefore, although a generalization number of 5 is used, more than 5 weights are changed during each update and this means that more inputs are categorized as similar and that is undesirable. To rectify this the generalization number can be reduced and number of iterations increased to improve perfomance. Also, the type of sliding window utilized has an impact on the results.  
   \begin{figure}[h!]
+    \centering
     \includegraphics[scale=0.35]{./Results/convergenceVsgeneralizationC.png}
   \end{figure}
 \newpage
@@ -46,8 +50,30 @@ is paused midway, all the relevant information is lost as the history of the inf
 Although changes can be made to such networks by storing certain information, this is usally intractable as it means a different logic to determine where the current function is located at. 
 Therefore, a model that is only state dependent becomes necessary. Cmac can be used to model a state dependent recurrent connections and this is shown below. 
 
-\paragraph{Modelling Cmac to output desired trajectory:} 
+\paragraph{Modelling Cmac to output desired trajectory:}
+The output of cmac is now fed as an input to P(logic depends on the particular problem), then P decodes
+the appropriate weights to excite. This is illustrated by the diagram below.
 
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.35]{./Data/statemodelling.png}
+    \caption{Recurrent Cmac}
+  \end{figure}
+
+  \textbf{What if two different inputs have the same ouput value. How do we know which input to excite next?}
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.3]{./Data/model2.png}
+    \caption{Trajectory}
+  \end{figure} \\
+  The decoding function \textbf{P} must take this into account. Therefore,  P is modified to be $P(\sum,weights)$. Therefore,
+  different inputs with same output weight sum are treated as different. The diagram is now modified to be the following.
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.8]{./Data/modifiedmodel.png}
+    \caption{Modified model}
+  \end{figure} 
 \end{document}
 
 
