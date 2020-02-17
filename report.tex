@@ -1,8 +1,27 @@
 \documentclass{article}
 \usepackage{graphicx}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 \begin{document}
 \section{Discrete Cmac}
 \subsection{Description}
+ \begin{enumerate}
+   \item \textbf{Define input space} - In the implementation, the input space was defined over the range[0,10]
+   \item \textbf{Association Cells} - This is a 1D cmac, so the number of association cells was chosen to match the number
+    weights.In the implementation,35 weights with 35 association cells.
+   \item \textbf{Quantize input} - The input space is quantized so as to perform a table lookup. The quantization is achieved
+     using the formula given below.
+     \begin{equation}
+       q_x = \floor*{resolution*\frac{x - xmax}{xmin-xmax}}
+     \end{equation}
+     so in the implementation, we have,
+     \begin{equation}
+       q_x = \floor*{35*\frac{x- 0}{10 - 0}}
+     \end{equation}
+   \item \textbf{Generalization Number, g} - This number indicates the degree of similarity between tasks. Odd numbers was utilized as centering weights around quantized input was preferable. When an input is received, the association cells activated are centered around the quantized input. For example, suppose the quantized input of 3 is 3 with a generalization number of 5, this means that 2 cells before 3(0 and 1) and 2 cells after 3(4 and 5) are activated.
+
+ \end{enumerate}
 \subsection{Results}
   \paragraph{Generalization Vs Convergence:}
    Clearly from the graph shown below,it can be noted that  
