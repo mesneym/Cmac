@@ -38,7 +38,16 @@
     \includegraphics[scale=0.35]{./Results/convergenceVsgeneralizationC.png}
   \end{figure}
 \newpage
-\section{Recurrent Networks}
+\section{Recurrent Connections with Cmac}
+\paragraph{Problem:}
+Cmac can be particular useful in modelling connnections that are only state dependent. Most recurrent connections such as
+recurrent neural networks employed in speech recognition, music generation etc. are temporally dependent. So if a given task
+is paused midway, all the relevant information is lost as the history of the information seen previously matters.
+Although changes can be made to such networks by storing certain information, this is usally intractable as it means a different logic to determine where the current function is located at. 
+Therefore, a model that is only state dependent becomes necessary. Cmac can be used to model a state dependent recurrent connections and this is shown below. 
+
+\paragraph{Modelling Cmac to output desired trajectory:} 
+
 \end{document}
 
 
