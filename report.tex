@@ -5,11 +5,11 @@
 \subsection{Description}
 \subsection{Results}
   \paragraph{Generalization Vs Convergence:}
-   Clearly from the graphs shown below,it can be noted that  
+   Clearly from the graph shown below,it can be noted that  
   as the generalization number increases, the model has a hard time converging.This can
   be attributed to the fact that the generalization number,g indicates to a degree the similarity
-  between tasks. As the g increases, unrelated tasks are grouped as similar and the model tends
-  to overfit. Ideally, g is chosen so that tasks which are related have similar value whiles tasks
+  between tasks. As g increases, the model becomes weak(wrong model) as it tends to consistently learn the wrong thing by categorizing unrelated tasks 
+  as similar,hence a high bias. Ideally, g is chosen so that tasks which are related have similar values whiles tasks
   which are different have clear cut distinct values. 
   \begin{figure}[h!]
     \includegraphics[scale=0.35]{./Results/convergenceVsgeneralization.png}
