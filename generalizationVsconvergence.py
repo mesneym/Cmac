@@ -4,6 +4,7 @@
 # Generalization number,g
 ###########################################
 
+import os
 from Cmac import Cmac
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,42 +17,32 @@ y = np.sin(x)
 
 trainData = np.column_stack((x,y))
 
-x = np.random.uniform(0,10,(30,1))
-y = np.sin(x)
-
-testDataExpected = np.column_stack((x,y))
-
-
 #############################################
 #   Generalization vs Time to Convergence
 #############################################
 
-for g in range(3,25):
-    a = Cmac(g,35,35)
-    accuracyTableD = a.train(trainData[:,0],trainData[:,1])
-    testDataResults = np.zeros((len(x),2))
-    for i in range(len(x)):
-        y = a.prediction(x[i])
-        testDataResults[i]=[x[i],y]
+fig, ax = plt.subplots(nrows=4, ncols=4)
 
-    idx = testDataResults[:,0].argsort()
-    testDataResults = testDataResults[idx]
-    
-    #########################################
-    ## plotting graph
-    #########################################
+g = 3
+for row in ax:
+    for col in row:
+        a = Cmac(g,35,35)
+        accuracyTableD = np.array(a.train(trainData[:,0],trainData[:,1]))
 
-    ###########################
-    # Accuracy Table Discrete
-    ###########################
-    fig2, ax2 = plt.subplots()
-    ax2.plot(accuracyTableD[:,0],accuracyTableD[:,1],'-o')
-    ax2.set_title("Accuracy of Training(generalization = {})".format(g))
-    ax2.set_ylabel("Percentage wrong")
-    ax2.set_xlabel("Num of training samples")
-    # plt.savefig("/home/ak/Cmac/Data/ConvergenceVsGeneralization/Acc {}.png".format(g))
-    plt.show()
+        # plotting graph
+        col.plot(accuracyTableD[:,0],accuracyTableD[:,1],'b-')
+        col.set_title("Accuracy of Training(generalization = {})".format(g))
+        col.set_ylabel("Percentage wrong")
+        col.set_xlabel("Num of iterations")
+        g += 1
 
+fig.subplots_adjust(hspace=0.5)
+
+strFile = "/home/ak/Cmac/Data/convergenceVsgeneralization.png"
+if os.path.isfile(strFile):
+   os.remove(strFile)   
+plt.savefig("/home/ak/Cmac/Data/convergenceVsgeneralization.png")
+plt.show()
 
 
 
